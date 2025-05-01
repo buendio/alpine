@@ -1,0 +1,16 @@
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.store('productPopup', {
+      isOpen: false,
+      product: null,
+      open(product) {
+        this.product = product;
+        this.isOpen = true;
+      },
+      close() {
+        this.isOpen = false;
+        this.product = null;
+      },
+    });
+  });
+</script>
