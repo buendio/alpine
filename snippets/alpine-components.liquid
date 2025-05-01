@@ -1,30 +1,32 @@
-<div x-data="productGallery" x-init="fetchProducts()" class="product-gallery-alpine">
-  <template x-for="product in products" :key="product.id">
-    <div class="product-card-alpine" @click="$store.productPopup.open(product)">
-      <img class="alpine-img" :src="product.featured_image?.src || 'placeholder.jpg'" :alt="product.title">
-      <h3 class="alpine-title" x-text="product.title"></h3>
-    </div>
-  </template>
-
-  <!-- (overlay) -->
-  <div
-    x-show="$store.productPopup.isOpen"
-    x-transition
-    class="popup-overlay"
-    @click.self="$store.productPopup.close()"
-    x-cloak
-  >
-    <template x-if="$store.productPopup.product">
-      <div class="popup-window" @click.stop>
-        <button class="popup-close" @click="$store.productPopup.close()">&times;</button>
-
-        <!-- Контент -->
-        <img :src="$store.productPopup.product.featured_image?.src" alt="" class="popup-image">
-        <h2 x-text="$store.productPopup.product.title" class="popup-title"></h2>
-        <p x-text="stripTags($store.productPopup.product.body_html)" class="popup-description"></p>
-        <span x-text="$store.productPopup.product.price" class="popup-price"></span>
+<div class="page-width">
+  <div x-data="productGallery" x-init="fetchProducts()" class="product-gallery-alpine">
+    <template x-for="product in products" :key="product.id">
+      <div class="product-card-alpine" @click="$store.productPopup.open(product)">
+        <img class="alpine-img" :src="product.featured_image?.src || 'placeholder.jpg'" :alt="product.title">
+        <h3 class="alpine-title" x-text="product.title"></h3>
       </div>
     </template>
+
+    <!-- (overlay) -->
+    <div
+      x-show="$store.productPopup.isOpen"
+      x-transition
+      class="popup-overlay"
+      @click.self="$store.productPopup.close()"
+      x-cloak
+    >
+      <template x-if="$store.productPopup.product">
+        <div class="popup-window" @click.stop>
+          <button class="popup-close" @click="$store.productPopup.close()">&times;</button>
+
+          <!-- Контент -->
+          <img :src="$store.productPopup.product.featured_image?.src" alt="" class="popup-image">
+          <h2 x-text="$store.productPopup.product.title" class="popup-title"></h2>
+          <p x-text="stripTags($store.productPopup.product.body_html)" class="popup-description"></p>
+          <span x-text="$store.productPopup.product.price" class="popup-price"></span>
+        </div>
+      </template>
+    </div>
   </div>
 </div>
 
