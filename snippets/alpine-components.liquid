@@ -1,13 +1,12 @@
 <div class="page-width">
-  <div x-data="productGallery" x-init="fetchProducts()" class="product-gallery-alpine">
-    <template x-for="product in products" :key="product.id">
+  <div x-data x-init="$store.productGallery.fetchProducts()" class="product-gallery-alpine">
+    <template x-for="product in $store.productGallery.products" :key="product.id">
       <div class="product-card-alpine" @click="$store.productPopup.open(product)">
         <img class="alpine-img" :src="product.featured_image?.src || 'placeholder.jpg'" :alt="product.title">
         <h3 class="alpine-title" x-text="product.title"></h3>
       </div>
     </template>
 
-    <!-- (overlay) -->
     <div
       x-show="$store.productPopup.isOpen"
       x-transition
@@ -19,39 +18,15 @@
         <div class="popup-window" @click.stop>
           <button class="popup-close" @click="$store.productPopup.close()">&times;</button>
 
-          <!-- Контент -->
           <img :src="$store.productPopup.product.featured_image?.src" alt="" class="popup-image">
           <h2 x-text="$store.productPopup.product.title" class="popup-title"></h2>
-          <p x-text="stripTags($store.productPopup.product.body_html)" class="popup-description"></p>
+          <p
+            x-text="$store.productPopup.stripTags($store.productPopup.product.body_html)"
+            class="popup-description"
+          ></p>
           <span x-text="$store.productPopup.product.price" class="popup-price"></span>
         </div>
       </template>
     </div>
   </div>
 </div>
-
-<script>
-  function productGallery() {
-    return {
-      products: [],
-      fetchProducts() {
-        const handle = 'automated-collection'; // заміни на потрібний
-        fetch(`/collections/${handle}/products.json`)
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data.products);
-            this.products = data.products.map((p) => ({
-              ...p,
-              featured_image: p.images[0],
-              price: `$${p.variants[0].price}`,
-            }));
-          });
-      },
-      stripTags(html) {
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        return div.textContent || div.innerText || '';
-      },
-    };
-  }
-</script>

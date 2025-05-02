@@ -11,6 +11,27 @@
         this.isOpen = false;
         this.product = null;
       },
+      stripTags(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        return div.textContent || div.innerText || '';
+      },
+    });
+    Alpine.store('productGallery', {
+      products: [],
+      fetchProducts() {
+        const handle = 'automated-collection';
+        fetch(`/collections/${handle}/products.json`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.products);
+            this.products = data.products.map((p) => ({
+              ...p,
+              featured_image: p.images[0],
+              price: `$${p.variants[0].price}`,
+            }));
+          });
+      },
     });
   });
 </script>
